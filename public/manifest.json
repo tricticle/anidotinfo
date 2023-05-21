@@ -1,6 +1,6 @@
 {
-  "name": "AniDotLive",
-  "short_name": "AniDotLive",
+  "name": "AniDotInfo",
+  "short_name": "AniDotInfo",
   "start_url": "/?home=true",
   "scope": "/",
   "scopes": ["/scope1", "/scope2"],
