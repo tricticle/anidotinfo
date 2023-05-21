@@ -1,38 +1,96 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap');
+
+:root {
+  --tran: 0.7s ease;
+  --primary-color: #ffbdbd;
+  --secondary-color: #b882ff;
+  --background-color: #f1f1f1;
+  --text-color: #000000;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Unica One', cursive;
+  text-transform: capitalize;
+  --tran: all 0.5s ease;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  font-family: 'Unica One', cursive;
+  scroll-behavior: smooth;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+body::-webkit-scrollbar {
+  display: none;
+  color: transparent;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.container {
+  padding: 7px;
+  margin: 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.art-grid {
+  display: grid;
+  width: 100%;
+  grid-gap: 20px;
+  justify-items: center;
+  padding: 5px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.art {
+  border-radius: 7px;
+  box-shadow: 0px 7px 20px 5px rgba(0, 0, 0, 0.1);
+}
+
+.art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 7px;
+  transition: var(--tran);
+  filter: blur(30px);
+  transition: filter 0.3s ease;
+}
+
+
+.art img:not([src=""]) {
+  filter: none;
+}
+
+.art img:hover {
+  padding: 5px;
+  transition: var(--tran);
+  border-radius: 10px;
+  box-shadow: 0px 7px 20px 5px rgba(0, 0, 0, 0.1);
+}
+input[type="text"] {
+  padding: 5px;
+  outline: transparent;
+  border: transparent;
+  font-family: 'Unica One', cursive;
+  font-size: 12px;
+  text-align: center;
+  box-shadow: 0px 7px 20px 5px rgba(0, 0, 0, 0.1);
+}
+.about-page{
+  display: flex;
+  box-shadow: 0px 7px 20px 5px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius:7px;
+}
+.data{
+  display: flex;
+  box-shadow: 0px 7px 20px 5px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 7px;
+  flex-direction: column;
+  align-content: stretch;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
 }
