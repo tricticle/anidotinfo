@@ -1,481 +1,138 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap');
+/* App.css */
 
-:root {
-  --tran: 0.7s ease;
-  --primary-color: #ff7070;
-  --secondary-color: #9b98ffe7;
-  --background-color: #ffffff;
-  --text-color: #000000;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Unica One', cursive;
-  text-transform: capitalize;
-  --tran: all 0.5s ease;
-  color: dark light;
-  text-wrap: balance;
-}
-
-body {
-  font-family: 'Unica One', cursive;
-  scroll-behavior: smooth;
-}
-
-body::-webkit-scrollbar {
-  display: none;
-  color: transparent;
-}
-
-.wrapper {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-  background-color: rgba(255, 255, 255, 0);
-  backdrop-filter: blur(70px);
-  border-radius:7px;
-}
-
-.header {
-  background-color: var(--background-color);
-  color: var(--text-color);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
-  border-radius: 7px;
-  transition: var(--tran);
-  box-shadow: 0px 7px 20px 5px rgba(0, 0, 0, 0.199);
-  background-repeat: none;
-  object-fit: cover;
-  flex-direction: row;
-  margin: 10px;
-  z-index: 99;
-}
-.header h1{
-    font-family: 'Poppins', sans-serif;
-    font-size: 20px;
-}
-
-.menu-btn button {
-  display: flex;
-  font-family: 'Poppins', sans-serif;
-  transition: var(--tran);
-  outline: transparent;
-  border: none;
-  background-color: var(--text-color);
-  border-radius: 2px;
-  color: var(--background-color);
-  font-size: 11px;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-content: center;
-  justify-content: center;
-  align-items: center;
-  margin: 3px;
-  padding: 5px;
-}
-
-.dropdown {
-  display: flex;
-display: none;
-}
-
-.dropdown.open {
-  display: flex;
-  position: absolute;
-  top: 69px;
-  right: 7px;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.247);
-  padding: 10px;
-  z-index: 1;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-items: center;
-  justify-content: center;
-  align-content: center;
-  gap: 2px;
-}
-
-.dropdown ul {
-  display: flex;
-  list-style: none;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-content: center;
-  align-items: center;
-  justify-content: center;
-}
-
-.dropdown li {
-  padding: 5px;
-  cursor: pointer;
-  font-size: 11px;
-}
-
-.dropdown li:hover {
-  background-color: var(--secondary-color);
-  border-radius: 3px;
-  transition: var(--tran);
-}
-
-.menu-btn button:hover {
-  transition: var(--tran);
-  color: var(--text-color);
-  background-color: var(--background-color);
-  border: 3px;
-}
-
-.header:hover {
-  background-color: var(--primary-color);
-  color: var(--background-color);
-  transition: var(--tran);
-}
-
-.search-bar{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-content: center;
-    justify-content: center;
-    align-items: flex-end;
-  }
-  
-  .search-bar input[type="text"]{
-    font-size: 10px;
-  }
-  
-  .menu-btn button{
-    border-radius: 20px;
-  }
-  .fa-bars{
-    font-size: 7px;
-  }
-  
-  .container {
-    display: flex;
-    max-width: 100%;
-    align-items: center;
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-content: center;
-    justify-content: center;
-  }
-  
-.top-airing{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  align-content: center;
-  flex-wrap: wrap;
-  padding-inline: 10px;
-}
-
-.top-airing h2{
-  padding: 7px;
-  font-family: 'Poppins', sans-serif;
-}
-
-.inset {
-  display: none;
-}
-
-.inset.show {
-  display: block;
-}
-
-.inset {
-  position: fixed;
-  inset: 0;
-  overflow: auto;
-  background-color: rgb(255, 255, 255);
-  z-index: 999;
+/* Container styles */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
-}
-.anime-episodes{
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-  align-items: center;
-  justify-content: center;
-}
-video{
-  padding: 30px;
-  height: 100%;
-  width: 100%;
-}
-.close-button {
-  position: relative;
-  display: flex;
-  height: 30px;
-  width: 30px;
-  margin-top: 30px;
-  border: none;
-  border-radius: 100%;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-content: center;
-  justify-content: center;
-  align-items: center;
-}
-.fa-close{
-  font-size: 11px;
-}
-.server-list{
-  display: flex;
-  height: 100%;
-  width: 100%;
-  padding: 10px;
-  gap: 10px;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  align-content: center;
+  font-family: Arial, sans-serif;
 }
 
-.server-btn button {
-  width: 100%;
-  padding: 10px;
-  background-color: #000000;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+/* Heading styles */
+h1 {
+  font-size: 24px;
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
-.server-btn button:hover {
-  background-color: #ff9595;
-}
-
-.episode-list button{
-  transition: var(--tran);
-  width: calc(20% + 30px);
-  display: flex;
-  margin: 5px;
-  padding: 5px;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  box-shadow: 0px 4px 10px hsla(251, 100%, 68%, 0.397);
-  align-items: center;
-  justify-content: center;
-  flex-wrap: nowrap;
-}
-.episode-list button:hover{
-  transition: var(--tran);
-  box-shadow: 0px 4px 10px hsla(0, 0%, 0%, 0.305);
-  background-color: var(--secondary-color);
-  color: var(--background-color);
-}
-
-.episode-list{
-  display: flex;
-  height: 100%;
-  width: 300px;
-  overflow: scroll;
-  align-items: center;
-}
-.episode-list::-webkit-scrollbar {
-  display: none;
-}
-
-@keyframes color {
-  0% {
-    color: #ffbdbd;
-  }
-
-  20% {
-    color: #b882ff;
-  }
-
-  40% {
-    color: #ff4f4f;
-  }
-
-  60% {
-    color: #ff4f4f;
-  }
-
-  80% {
-    color: #b882ff;
-  }
-
-  100% {
-    color: #ffbebe;
-  }
-}
-.search-results{
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-content: center;
-  justify-content: center;
-  padding: 5px 20px 0px 20px;
-}
-.search-results .anime-card {
-  flex-grow: 1;
-  flex-basis: 1;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
-  height: 100%;
-  width: 100%;
-  border-radius: 7px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-  overflow: hidden;
-  transition: box-shadow 0.3s ease;
-  padding: 5px;
-  gap: 20px;
-  text-wrap:balance;
-}
-
-.search-results .anime-list img {
-  min-height: 90px;
-  min-width: 90px;
-  max-height: 90px;
-  max-width: 90px;
-  inset: 0;
-  object-fit: cover;
-}
-
-.search-results .anime-card button{
-  text-align: center;
-  inset: 0;
-  min-height: 30px;
-  min-width: 30px;
-  max-height: 30px;
-  max-width: 30px;
-  border-radius: 100%;
-}
-
-.top-airing .anime-list{
-  display: flex;
-  flex-wrap: wrap;
-  align-content: center;
-  justify-content: center;
-  align-items: center;
-}
-
-.anime-list {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: center;
-  align-content: center;
-  align-items: center;
-  gap: 20px;
-}
-.search-results .anime-list{
-  margin-top: 79px;
-}
+/* Anime card styles */
 .anime-card {
+  cursor: pointer;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  height: 100%;
-  border-radius: 7px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  width: 300px;
-}
-.anime-card img {
-  width: 100%;
-  height: 300px;
-  object-fit: cover;
-  padding: 5px;
-  border-radius: 10px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  padding: 10px;
+  transition: background-color 0.3s ease-in-out;
 }
 
 .anime-card:hover {
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  background-color: #e0e0e0;
 }
 
-.anime-card p {
-  font-family: 'Poppins', sans-serif;
-  font-size: 12px;
-  margin-top: 5px;
-  color:var(--text-color);
-  text-align: center;
-  padding-bottom: 10px;
+.anime-card img {
+  width: 100px;
+  height: auto;
+  margin-right: 10px;
+  border-radius: 5px;
 }
 
-.ani-detail{
+.ani-detail {
   flex: 1;
-  text-align: center;
-  text-wrap:balance;
-}
-.ani-detail h3{
-  padding: 3px;
-  text-wrap:balance;
-  font-size: inherit;
-  text-size-adjust: inherit;
 }
 
-i{
-  border-radius: 2px;
-  padding: 5px;
-  font-size: 10px;
+.ani-detail h3 {
+  font-size: 18px;
+  margin: 0;
 }
 
-.anime-card button {
-  transition: var(--tran);
-  text-shadow: 0px 1px  5px var(--text-color);
-  display: flex;
-  margin: 10px;
-  padding: 5px;
-  background-color: hsl(0, 0%, 0%);
-  color: var(--background-color);
-  border: none;
-  border-radius: 3px;
+.ani-detail p {
+  margin: 5px 0;
+}
+
+/* Selected Anime Info styles */
+.selected-anime-info {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+}
+
+.selected-anime-info h2 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.selected-anime-info p {
+  margin: 5px 0;
+}
+
+/* Episode list styles */
+.episode-list {
+  margin-top: 20px;
+}
+
+.episode-list h2 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.episode-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.episode-list li {
   cursor: pointer;
-  box-shadow: 0px 4px 10px hsla(0, 0%, 0%, 0.3);
-  align-items: center;
-  justify-content: center;
-  flex-wrap: nowrap;
+  margin: 5px 0;
+  padding: 5px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  transition: background-color 0.3s ease-in-out;
 }
 
-
-input[type="text"] {
-    border-radius: 2px;
-    outline: transparent;
-    border: transparent;
-    font-family: 'Unica One', cursive;
-    font-size: 12px;
-    text-align: center;
-    box-shadow: 0px 7px 20px 3px rgba(0, 0, 0, 0.13);
-    padding: 10px;
+.episode-list li:hover {
+  background-color: #e0e0e0;
 }
 
-input[type="text"]:focus {
-  transition: var(--tran);
-  font-family: 'Poppins', sans-serif;
+/* Loading message styles */
+p.loading {
+  margin-top: 20px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* HLS player container styles */
+.hls-player-container {
+  position: relative;
+}
+
+/* Quality selection styles */
+.quality-selection {
+  position: sticky;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 5px;
+  border-radius: 5px;
+  color: #fff;
+}
+
+.quality-selection label {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.quality-selection select {
+  padding: 5px;
+  border: none;
+  background-color: #fff;
+  color: #333;
   border-radius: 3px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.quality-selection select:focus {
   outline: none;
-  box-shadow: 0px 8px 7px 2px rgba(0, 0, 0, 0.1);
-}
-
-.about-page {
-  right: 0;
-  bottom: 0;
-  text-align: center;
-  font-family: 'Unica One', cursive;
-  width: 100%;
-  color: var(--text-color);
-  padding: 1px;
-}
-
-.about-page p {
-  font-size: 10px;
-  text-decoration: none;
-  padding: 3px;
 }

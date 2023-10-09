@@ -1,45 +1,27 @@
-// src/App.jsx
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import './App.css'; // Import the CSS file at the top of your App.jsx
-import Hls from 'hls.js';
+import './App.css';
+import Hls from 'hls.js'; // Import hls.js library
 
 function App() {
   const [animeData, setAnimeData] = useState([]);
   const [popular, setPopular] = useState([]);
-  const [selectedAnime, setSelectedAnime] = useState(null);
-  const [episodeUrls, setEpisodeUrls] = useState([]);
-  const [selectedQuality, setSelectedQuality] = useState('');
-  const [totalEpisodes, setTotalEpisodes] = useState(0);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
+  const [selectedAnimeInfo, setSelectedAnimeInfo] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [episodes, setEpisodes] = useState([]);
+  const [selectedEpisode, setSelectedEpisode] = useState(null);
+  const [selectedQuality, setSelectedQuality] = useState(null); // State for selected quality
+  const videoRef = useRef(null); // Ref for the video element
+  const [hls, setHls] = useState(null); // State for hls.js instance
 
-  const handleSearch = async () => {
-    try {
-      // Make a request to the AniList API with the search query
-      const response = await axios.get(`${url}${searchQuery}`, {
-        params: {
-          page: 1,
-          perPage: 20,
-        },
-      });
-
-      const { results } = response.data;
-      console.log(response.data)
-
-      // Update the search results state
-      setSearchResults(results);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const url = 'https://api.consumet.org/meta/anilist/';
+  const apiUrl = 'https://api.consumet.org/meta/anilist/';
+  const infoUrl = 'https://api.consumet.org/meta/anilist/info/';
+  const episodeApiUrl = 'https://api.consumet.org/meta/anilist/watch/';
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${url}trending`, {
+        const response = await axios.get(`${apiUrl}trending`, {
           params: {
             page: 1,
             perPage: 20,
@@ -47,10 +29,7 @@ function App() {
         });
 
         const { results } = response.data;
-
-        // Process the data if needed
         setAnimeData(results);
-        console.log(results);
       } catch (error) {
         console.error(error);
       }
@@ -58,11 +37,12 @@ function App() {
 
     fetchData();
   }, []);
+  
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${url}popular`, {
+        const response = await axios.get(`${apiUrl}popular`, {
           params: {
             page: 1,
             perPage: 20,
@@ -70,10 +50,7 @@ function App() {
         });
 
         const { results } = response.data;
-
-        // Process the data if needed
         setPopular(results);
-        console.log(results);
       } catch (error) {
         console.error(error);
       }
@@ -82,132 +59,94 @@ function App() {
     fetchData();
   }, []);
 
-  const toggleInset = () => {
-    setSelectedAnime(selectedAnime ? null : selectedAnime);
-  };
-
-
-  const fetchEpisodesByTitle = async (title, episodeNumber) => {
+  const fetchAnimeInfo = async (animeId) => {
     try {
-      const formattedTitle = title.replace(/ /g, '-').toLowerCase() + `-episode-${episodeNumber}`;
-      const response = await axios.get(`https://api.consumet.org/meta/anilist/watch/${formattedTitle}`);
-      const episodes = response.data;
-      return episodes;
-    } catch (error) {
-      console.error(error);
-      return [];
-    }
-  };
-
-  const loadAnimeDetails = async (animeId) => {
-    try {
-      const response = await axios.get(`${url}info/${animeId}`, {
+      setLoading(true);
+      const response = await axios.get(`${infoUrl}${animeId}`, {
         params: {
           provider: 'gogoanime',
         },
       });
-      const data = response.data;
-      setSelectedAnime(data);
-  
-      // Fetch the total number of episodes for the selected anime
-      setTotalEpisodes(data.totalEpisodes);
-  
-      // Try loading episodes by anime title (English first)
-      let episodes = await fetchEpisodesByTitle(data.title.english, 1);
-  
-      // If loading by English title fails, try loading by romaji title
-      if (episodes.length === 0) {
-        episodes = await fetchEpisodesByTitle(data.title.romaji, 1);
+
+      const animeInfo = response.data;
+      setSelectedAnimeInfo(animeInfo);
+      if (animeInfo.episodes) {
+        setEpisodes(animeInfo.episodes);
       }
-  
-      // If loading by romaji title fails, try loading by Japanese title
-      if (episodes.length === 0) {
-        episodes = await fetchEpisodesByTitle(data.title.japanese, 1);
-      }
-  
-      setEpisodeUrls(episodes.sources);
-      setSelectedQuality(episodes.sources[0].quality); // Set the default quality
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
-  };  
-  
-  const selectEpisode = async (episodeNumber) => {
-    // Try selecting episodes by English title first
-    let episodes = await fetchEpisodesByTitle(selectedAnime.title.english, episodeNumber);
-  
-    // If selecting by English title fails, try selecting by romaji title
-    if (episodes.length === 0) {
-      episodes = await fetchEpisodesByTitle(selectedAnime.title.romaji, episodeNumber);
-    }
-  
-    setEpisodeUrls(episodes.sources);
-    setSelectedQuality(episodes.sources[0].quality);
   };
-  
 
-  const VideoPlayer = ({ episodeUrl }) => {
-    const videoRef = useRef(null);
-  
-    useEffect(() => {
-      if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(episodeUrl);
-        hls.attachMedia(videoRef.current);
+  const fetchEpisodeDetails = async (episodeId) => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${episodeApiUrl}${episodeId}`);
+      const episodeDetails = response.data;
+      setSelectedEpisode(episodeDetails);
+
+      // Assuming that the episodeDetails contain an HLS URL
+      if (episodeDetails.sources && episodeDetails.sources.length > 0) {
+        // Set the initial selected quality to the default (or any desired quality)
+        setSelectedQuality('360p');
+        
+        // Create an HLS instance
+        const hlsInstance = new Hls();
+        setHls(hlsInstance); // Set the hls.js instance in state
+
+        // Attach the HLS stream to the video element
+        hlsInstance.attachMedia(videoRef.current);
+
+        // Handle HLS events if needed (e.g., errors)
+        hlsInstance.on(Hls.Events.ERROR, (event, data) => {
+          console.error('HLS error', data.type, data.details);
+        });
+
+        // Load the initial HLS source URL
+        const initialSource = episodeDetails.sources.find(
+          (source) => source.quality === selectedQuality
+        );
+
+        if (initialSource) {
+          hlsInstance.loadSource(initialSource.url);
+          hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => {
+            // Start playing the video after the manifest is parsed
+            videoRef.current.play();
+          });
+        }
       }
-    }, [episodeUrl]);
-  
-    return (
-      <video
-      ref={videoRef}
-      controls
-      poster={selectedAnime ? selectedAnime.image : ''}
-    >
-        Your browser does not support the video tag.
-      </video>
-    );
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  // Function to change the quality and load the corresponding HLS source
+  const changeQuality = (quality, sourceUrl) => {
+    setSelectedQuality(quality);
+
+    if (hls) {
+      // Load the selected HLS source URL
+      hls.loadSource(sourceUrl);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        // Start playing the video after the manifest is parsed
+        videoRef.current.play();
+      });
+    }
+  };
   return (
     <div className='container'>
-      <h1>trending</h1>
-      <div className='search-box'>
-        <input
-          type='text'
-          placeholder='Search for anime...'
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <button onClick={handleSearch}>Search</button>
-      </div>
-      <div className='search-results'>
-        <div className="anime-list">
-        {searchResults.map((anime) => (
-          <div
-            className='anime-card'
-            key={anime.id}
-            style={{ backgroundColor: anime.color }}
-            onClick={() => loadAnimeDetails(anime.id)}
-          >
-          <img src={anime.image} alt={anime.title.english} />
-          <div className='ani-detail'>
-              <h3>{anime.title.english}</h3>
-              <p>Type: {anime.type}</p>
-              <p>Rating: {anime.rating}</p>
-              <p>Release Date: {anime.releaseDate}</p>
-            </div>
-          </div>
-        ))}
-        </div>
-      </div>
+      <h1>Trending</h1>
       <div className='anime-list'>
         {animeData.map((anime) => (
           <div
             className='anime-card'
             key={anime.id}
             style={{ backgroundColor: anime.color }}
-            onClick={() => loadAnimeDetails(anime.id)} // Load details on click
-          >
+            onClick={() => fetchAnimeInfo(anime.id)}>
             <img src={anime.image} alt={anime.title.english} />
             <div className='ani-detail'>
               <h3>{anime.title.english}</h3>
@@ -217,51 +156,82 @@ function App() {
             </div>
           </div>
         ))}
-        <div className={`inset ${selectedAnime ? 'show' : 'hide'}`}>
-          {selectedAnime && (
-            <div className='anime-episodes' style={{ backgroundImage: `url(${selectedAnime.cover})`, backgroundSize: 'cover' }}>
-              <button className="close-button" onClick={toggleInset}> <i className="fas fa-close"></i></button>
-                {selectedQuality && (
-                  <div className="video">
-                <VideoPlayer episodeUrl={episodeUrls.find((episode) => episode.quality === selectedQuality).url} />
-                  </div>
-                )}
-                <div className="ani-detail">
-                <h3>{selectedAnime.title.english}</h3>
-              <div dangerouslySetInnerHTML={{ __html: selectedAnime.description }} />
-              <p>Available Qualities:</p>
-                </div>
-              <div className='server-list'>
-                {episodeUrls.map((episode, index) => (
-                  <div className='server-btn' key={index}>
-                    <button onClick={() => setSelectedQuality(episode.quality)}>{episode.quality}</button>
-                  </div>
-                ))}
-              </div>
-              {totalEpisodes > 1 && (
-              <div className="episode-list">
-                    {[...Array(totalEpisodes)].map((_, index) => (
-                        <button onClick={() => selectEpisode(index + 1)}>Episode {index + 1}</button>
-                    ))}
-                </div>
-              )}
-              </div>
-          )}
-        </div>
-        <h1>popular</h1>
-        <div className='anime-list'>
+      </div>
+
+      <h1>Popular</h1>
+      <div className='anime-list'>
         {popular.map((anime) => (
-          <div className='anime-card' key={anime.id} style={{ backgroundColor: anime.color }} onClick={() => loadAnimeDetails(anime.id)}>
+          <div
+            className='anime-card'
+            key={anime.id}
+            style={{ backgroundColor: anime.color }}
+            onClick={() => fetchAnimeInfo(anime.id)}>
             <img src={anime.image} alt={anime.title.english} />
             <div className='ani-detail'>
               <h3>{anime.title.english}</h3>
               <p>Type: {anime.type}</p>
               <p>Rating: {anime.rating}</p>
               <p>Release Date: {anime.releaseDate}</p>
-          </div>
+            </div>
           </div>
         ))}
-                    </div>
+      </div>
+
+      {selectedAnimeInfo && (
+        <div className='selected-anime-info'>
+          <h2>Selected Anime Info</h2>
+          <p>Title: {selectedAnimeInfo.title.english}</p>
+          <p>Summary: {selectedAnimeInfo.description}</p>
+        </div>
+      )}
+
+      {episodes.length > 0 && (
+        <div className='episode-list'>
+          <h2>Episodes</h2>
+          <ul>
+            {episodes.map((episode) => (
+              <li
+                key={episode.id}
+                onClick={() => fetchEpisodeDetails(episode.id)}
+              >
+                Episode {episode.episode}: {episode.id}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {loading && <p>Loading anime info...</p>}
+
+      {/* Render the video element for HLS playback */}
+      <div className='hls-player-container'>
+        <video ref={videoRef} controls width="100%" height="auto" />
+      </div>
+      <div className="inset">
+      {selectedEpisode && (
+        <div className='selected-episode-info'>
+          <h2>Selected Episode Info</h2>
+          <p>Title: {selectedEpisode.title}</p>
+          <p>Duration: {selectedEpisode.duration} minutes</p>
+          {/* Add more episode details here as needed */}
+
+          {/* Quality selection */}
+          <div className='quality-selection'>
+            <h3>Select Quality:</h3>
+            <ul>
+              {selectedEpisode.sources.map((source) => (
+                <li
+                  key={source.quality}
+                  onClick={() => changeQuality(source.quality, source.url)}
+                  className={source.quality === selectedQuality ? 'selected' : ''}
+                >
+                  {source.quality}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
       </div>
     </div>
   );
