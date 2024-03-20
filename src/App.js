@@ -14,9 +14,9 @@ function App() {
   const videoRef = useRef(null); // Ref for the video element
   const [hls, setHls] = useState(null); // State for hls.js instance
 
-  const apiUrl = 'https://api.consumet.org/meta/anilist/';
-  const infoUrl = 'https://api.consumet.org/meta/anilist/info/';
-  const episodeApiUrl = 'https://api.consumet.org/meta/anilist/watch/';
+  const apiUrl = 'https://luffy-api.vercel.app/meta/anilist/';
+  const infoUrl = 'https://luffy-api.vercel.app/meta/anilist/info/';
+  const episodeApiUrl = 'https://luffy-api.vercel.app/meta/anilist/watch/';
 
   useEffect(() => {
     const fetchData = async () => {
